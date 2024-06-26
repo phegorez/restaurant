@@ -44,7 +44,7 @@ const Menu = () => {
                 {!user ? (
                     <Link onClick={() => setOpen(false)} href='/login'>Login</Link>
                 ) : (
-                    <Link onClick={() => setOpen(false)} href='/order'>Order</Link>)}
+                    <Link onClick={() => setOpen(false)} href='/orders'>Order</Link>)}
                 <Link onClick={() => setOpen(false)} href='/cart'>
                     <CartIcon />
                 </Link>

@@ -1,17 +1,40 @@
-import { pizzas } from '@/data'
+import { ProductType } from '@/types/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const CategoryPage = () => {
+const getData = async (category:string) => {
+  const res = await fetch(`http://localhost:3000/api/products?category=${category}`, {
+    cache: 'no-store'
+  })
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data')
+  }
+
+  return res.json()
+}
+
+type Props = {
+  params: { category: string }
+}
+
+const CategoryPage = async ({ params }: Props) => {
+
+  console.log('params is', params)
+  const products:ProductType[] = await getData(params.category)
+
   return (
     <div className='flex flex-wrap text-red-500'>
-      {pizzas.map(item => (
+      {products.map(item => (
         <Link className='w-full h-[60vh] border-r-2 border-b-2 border-red-500 sm:w-1/2 lg:w-1/3 p-4 flex flex-col justify-between group odd:bg-fuchsia-50' href={`/product/${item.id}`} key={item.id}>
           {/* IMAGE CONTAINER */}
           {item.img &&
             <div className='relative h-[80%]'>
-              <Image alt='' src={item.img} fill className='object-contain'/>
+              <Image alt='' src={item.img} fill className='object-contain' />
             </div>
           }
           {/* TEXT CONTAINER */}
